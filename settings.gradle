@@ -1,0 +1,2 @@
+rootProject.name='GIFViewer'
+include ':app'
