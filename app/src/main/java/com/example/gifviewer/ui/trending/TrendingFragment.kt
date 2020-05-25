@@ -1,21 +1,27 @@
 package com.example.gifviewer.ui.trending
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 
 import com.example.gifviewer.R
 import com.example.gifviewer.databinding.FragmentTrendingBinding
+import dagger.android.support.DaggerFragment
+import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass.
- */
-class TrendingFragment : Fragment() {
+class TrendingFragment : DaggerFragment() {
 
-    lateinit var binding: FragmentTrendingBinding
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private lateinit var binding: FragmentTrendingBinding
+    private val trendingFragmentViewModel: TrendingFragmentViewModel by viewModels {
+        viewModelFactory
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
