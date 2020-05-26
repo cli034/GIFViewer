@@ -33,7 +33,8 @@ class TrendingFragment : DaggerFragment() {
             container,
             false
         ).apply {
-
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = trendingFragmentViewModel
         }
 
         return binding.root

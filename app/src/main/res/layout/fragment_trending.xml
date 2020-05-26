@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.example.gifviewer.ui.trending.TrendingFragmentViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

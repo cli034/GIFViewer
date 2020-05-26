@@ -1,9 +1,7 @@
 package com.example.gifviewer.di
 
 import com.example.gifviewer.GifApplication
-import com.example.gifviewer.di.module.ActivityBuildersModule
-import com.example.gifviewer.di.module.FragmentBuildersModule
-import com.example.gifviewer.di.module.ViewModelModule
+import com.example.gifviewer.di.module.*
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
@@ -15,7 +13,10 @@ import javax.inject.Singleton
     AndroidInjectionModule::class,
     ActivityBuildersModule::class,
     FragmentBuildersModule::class,
-    ViewModelModule::class
+    ViewModelModule::class,
+    NetworkModule::class,
+    ServiceModule::class,
+    RepositoryModule::class
 ])
 interface AppComponent : AndroidInjector<GifApplication> {
 
