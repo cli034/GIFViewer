@@ -1,4 +1,4 @@
-package com.example.gifviewer.ui.trending
+package com.example.gifviewer.ui.gif
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,20 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import com.example.gifviewer.R
-import com.example.gifviewer.databinding.FragmentTrendingBinding
+import com.example.gifviewer.databinding.FragmentGifBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class TrendingFragment : DaggerFragment() {
+class GifFragment : DaggerFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private lateinit var binding: FragmentTrendingBinding
-    private val trendingFragmentViewModel: TrendingFragmentViewModel by viewModels {
+    private lateinit var binding: FragmentGifBinding
+    private lateinit var gifAdapter: GifAdapter
+    private val gifFragmentViewModel: GifFragmentViewModel by viewModels {
         viewModelFactory
     }
 
@@ -27,14 +29,14 @@ class TrendingFragment : DaggerFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate<FragmentTrendingBinding>(
+        binding = DataBindingUtil.inflate<FragmentGifBinding>(
             inflater,
-            R.layout.fragment_trending,
+            R.layout.fragment_gif,
             container,
             false
         ).apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = trendingFragmentViewModel
+            viewModel = gifFragmentViewModel
         }
 
         return binding.root
@@ -47,11 +49,23 @@ class TrendingFragment : DaggerFragment() {
     }
 
     private fun initView() {
-        binding.layoutToolbar.toolbar.setTitle(R.string.app_name)
+        gifAdapter = GifAdapter {
+
+        }
+
+        with(binding) {
+            rvGifs.apply {
+                adapter = gifAdapter
+            }
+        }
     }
 
     private fun initViewModels() {
-
+        with(gifFragmentViewModel) {
+            gifObjectList.observe(viewLifecycleOwner, Observer {
+                gifAdapter.submitList(it)
+            })
+        }
     }
 
 }

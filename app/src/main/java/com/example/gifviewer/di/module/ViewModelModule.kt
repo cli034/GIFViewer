@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.gifviewer.di.viewmodel.ViewModelFactory
 import com.example.gifviewer.di.viewmodel.ViewModelKey
-import com.example.gifviewer.ui.trending.TrendingFragmentViewModel
+import com.example.gifviewer.ui.gif.GifFragmentViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -17,6 +17,6 @@ abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(TrendingFragmentViewModel::class)
-    internal abstract fun trendingFragmentViewModel(viewModel: TrendingFragmentViewModel): ViewModel
+    @ViewModelKey(GifFragmentViewModel::class)
+    internal abstract fun trendingFragmentViewModel(viewModel: GifFragmentViewModel): ViewModel
 }

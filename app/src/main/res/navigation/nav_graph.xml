@@ -6,6 +6,6 @@
     app:startDestination="@id/trendingFragment">
     <fragment
         android:id="@+id/trendingFragment"
-        android:name="com.example.gifviewer.ui.trending.TrendingFragment"
+        android:name="com.example.gifviewer.ui.gif.GifFragment"
         android:label="TrendingFragment" />
 </navigation>

@@ -1,6 +1,6 @@
 package com.example.gifviewer.di.module
 
-import com.example.gifviewer.ui.trending.TrendingFragment
+import com.example.gifviewer.ui.gif.GifFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -8,5 +8,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentBuildersModule {
 
     @ContributesAndroidInjector
-    abstract fun trendingFragment(): TrendingFragment
+    abstract fun trendingFragment(): GifFragment
 }
