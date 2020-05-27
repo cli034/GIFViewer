@@ -11,4 +11,11 @@ interface GifService {
         @Query("pos") position: String,
         @Query("key") api_key: String
     ): TenorResponse
+
+    @GET("search")
+    suspend fun retrieveSearchGifs(
+        @Query("q") keyword: String,
+        @Query("pos") position: String,
+        @Query("key") api_key: String
+    ): TenorResponse
 }

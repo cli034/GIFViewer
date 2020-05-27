@@ -12,4 +12,8 @@ class GifRepoImpl @Inject constructor(
     override suspend fun retrieveTrendingGifs(nextQueryPos: String): TenorResponse {
         return gifService.retrieveTrendingGifs(nextQueryPos, ApiConstants.API_KEY)
     }
+
+    override suspend fun retrieveSearchGifs(keyword: String, nextQueryPos: String): TenorResponse {
+        return gifService.retrieveSearchGifs(keyword, nextQueryPos, ApiConstants.API_KEY)
+    }
 }

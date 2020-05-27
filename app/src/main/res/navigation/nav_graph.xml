@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/trendingFragment">
+    app:startDestination="@id/gifFragment">
     <fragment
-        android:id="@+id/trendingFragment"
+        android:id="@+id/gifFragment"
         android:name="com.example.gifviewer.ui.gif.GifFragment"
-        android:label="TrendingFragment" />
+        android:label="GifFragment" >
+        <action
+            android:id="@+id/action_gifFragment_to_gifDetailFragment"
+            app:destination="@id/gifDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/gifDetailFragment"
+        android:name="com.example.gifviewer.ui.gif.GifDetailFragment"
+        android:label="GifDetailFragment" />
 </navigation>

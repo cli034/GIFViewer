@@ -34,6 +34,7 @@
             android:cursorVisible="false"
             android:hint="@string/hint_search"
             android:singleLine="true"
+            android:inputType="text"
             android:imeOptions="actionDone"
             app:layout_constraintTop_toTopOf="@id/toolbar"
             app:layout_constraintStart_toStartOf="@id/toolbar"

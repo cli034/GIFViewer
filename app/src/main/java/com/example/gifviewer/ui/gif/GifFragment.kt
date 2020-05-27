@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.gifviewer.R
 import com.example.gifviewer.databinding.FragmentGifBinding
@@ -54,14 +57,37 @@ class GifFragment : DaggerFragment() {
         }
 
         with(binding) {
+            etSearchbar.setOnEditorActionListener { _, id, _ ->
+                if (id == EditorInfo.IME_ACTION_DONE) {
+                    val keyword = etSearchbar.text.toString()
+                    gifFragmentViewModel.updateSearchKeywordAndReset(keyword)
+                    gifFragmentViewModel.searchGifs()
+                }
+                false
+            }
+
             rvGifs.apply {
                 adapter = gifAdapter
+
+                addOnScrollListener(object: RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+
+                        (rvGifs.layoutManager as? GridLayoutManager)?.let {
+                            if (it.findLastCompletelyVisibleItemPosition() == it.itemCount - 1
+                                && dy > 0) {
+                                gifFragmentViewModel.loadMoreGifs()
+                            }
+                        }
+                    }
+                })
             }
         }
     }
 
     private fun initViewModels() {
         with(gifFragmentViewModel) {
+
             gifObjectList.observe(viewLifecycleOwner, Observer {
                 gifAdapter.submitList(it)
             })
