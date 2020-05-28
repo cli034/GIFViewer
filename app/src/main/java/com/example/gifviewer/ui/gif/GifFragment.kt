@@ -9,6 +9,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -42,6 +45,8 @@ class GifFragment : DaggerFragment() {
             viewModel = gifFragmentViewModel
         }
 
+        setupNavigation()
+
         return binding.root
     }
 
@@ -51,19 +56,34 @@ class GifFragment : DaggerFragment() {
         initViewModels()
     }
 
+    private fun setupNavigation() {
+        val navController = findNavController()
+        val appBarConfiguration = AppBarConfiguration(navController.graph)
+        binding.toolbar.setupWithNavController(navController, appBarConfiguration)
+    }
+
     private fun initView() {
         gifAdapter = GifAdapter {
-
+            val fullSizeGifUrl = it.media.firstOrNull()?.gif?.url
+            val navAction = GifFragmentDirections.actionGifFragmentToGifDetailFragment(
+                gifUrl = fullSizeGifUrl
+            )
+            findNavController().navigate(navAction)
         }
 
         with(binding) {
             etSearchbar.setOnEditorActionListener { _, id, _ ->
                 if (id == EditorInfo.IME_ACTION_DONE) {
                     val keyword = etSearchbar.text.toString()
-                    gifFragmentViewModel.updateSearchKeywordAndReset(keyword)
+                    gifFragmentViewModel.updateSearchKeyword(keyword)
                     gifFragmentViewModel.searchGifs()
                 }
                 false
+            }
+
+            btnShowTrending.setOnClickListener {
+                etSearchbar.text?.clear()
+                gifFragmentViewModel.showTrendingGifs()
             }
 
             rvGifs.apply {

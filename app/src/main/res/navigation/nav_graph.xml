@@ -9,10 +9,21 @@
         android:label="GifFragment" >
         <action
             android:id="@+id/action_gifFragment_to_gifDetailFragment"
-            app:destination="@id/gifDetailFragment" />
+            app:destination="@id/gifDetailFragment"
+            app:enterAnim="@anim/slide_in_from_right"
+            app:exitAnim="@anim/slide_out_to_left"
+            app:popEnterAnim="@anim/slide_in_from_left"
+            app:popExitAnim="@anim/slide_out_to_right" />
     </fragment>
     <fragment
         android:id="@+id/gifDetailFragment"
         android:name="com.example.gifviewer.ui.gif.GifDetailFragment"
-        android:label="GifDetailFragment" />
+        android:label="GifDetailFragment" >
+
+        <argument
+            android:name="gifUrl"
+            app:argType="string"
+            android:defaultValue="null"
+            app:nullable="true"/>
+    </fragment>
 </navigation>

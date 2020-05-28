@@ -31,7 +31,7 @@
             android:layout_margin="10dp"
             android:padding="8dp"
             android:background="@drawable/bg_corner_boarder_grey"
-            android:cursorVisible="false"
+            android:textCursorDrawable="@null"
             android:hint="@string/hint_search"
             android:singleLine="true"
             android:inputType="text"
@@ -55,5 +55,40 @@
             tools:itemCount="10"
             tools:listitem="@layout/list_item_gifs"/>
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_noSearchResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_search_result"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_showTrending"
+            app:visibleGone="@{!viewModel.isLoading &amp;&amp; viewModel.gifObjectList.size == 0}"
+            tools:visibility="gone"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_showTrending"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/show_trending"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_noSearchResult"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:visibleGone="@{!viewModel.isLoading &amp;&amp; viewModel.gifObjectList.size == 0}"
+            tools:visibility="gone"/>
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:visibleGone="@{safeUnbox(viewModel.isLoading)}"
+            tools:visibility="gone"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

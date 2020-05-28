@@ -3,4 +3,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="hint_search">Search Tenor</string>
+    <string name="no_search_result">No Search Results</string>
+    <string name="show_trending">Show Trending</string>
 </resources>

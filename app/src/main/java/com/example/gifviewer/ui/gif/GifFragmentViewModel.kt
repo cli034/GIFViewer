@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gifviewer.domain.model.GifObject
+import com.example.gifviewer.domain.model.TenorResponse
 import com.example.gifviewer.domain.repository.GifRepo
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,11 +18,11 @@ class GifFragmentViewModel @Inject constructor(
     private val _gifObjectList = MutableLiveData<List<GifObject>>()
     val gifObjectList: LiveData<List<GifObject>> = _gifObjectList
 
-    private val _trendingNextQueryPos = MutableLiveData<String>()
-    val trendingNextQueryPos: LiveData<String> = _trendingNextQueryPos
+    private val _nextQueryPos = MutableLiveData<String>()
+    val nextQueryPos: LiveData<String> = _nextQueryPos
 
-    private val _searchNextQueryPos = MutableLiveData<String>()
-    val searchNextQueryPos: LiveData<String> = _searchNextQueryPos
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     var currentKeyword = ""
 
@@ -30,15 +31,12 @@ class GifFragmentViewModel @Inject constructor(
     }
 
     private fun getTrendingGifs() {
+        showProgressBar()
         viewModelScope.launch {
             try {
-                val response = gifRepo.retrieveTrendingGifs(nextQueryPos = trendingNextQueryPos.value ?: "")
-                response.next?.let {
-                    _trendingNextQueryPos.value = it
-                }
-                response.results?.let {
-                    _gifObjectList.value = processPagination(it)
-                }
+                val response = gifRepo.retrieveTrendingGifs(nextQueryPos = nextQueryPos.value ?: "")
+                onResponseSuccess(response)
+                hideProgressBar()
             } catch (throwable: Throwable) {
                 onTrendingGifsError(throwable)
             }
@@ -46,22 +44,20 @@ class GifFragmentViewModel @Inject constructor(
     }
 
     private fun onTrendingGifsError(throwable: Throwable) {
+        hideProgressBar()
         Log.d("error", throwable.toString())
     }
 
     fun searchGifs() {
+        showProgressBar()
         viewModelScope.launch {
             try {
                 val response = gifRepo.retrieveSearchGifs(
                     keyword = currentKeyword,
-                    nextQueryPos = searchNextQueryPos.value ?: ""
+                    nextQueryPos = nextQueryPos.value ?: ""
                 )
-                response.next?.let {
-                    _searchNextQueryPos.value = it
-                }
-                response.results?.let {
-                    _gifObjectList.value = processPagination(it)
-                }
+                onResponseSuccess(response)
+                hideProgressBar()
             } catch (throwable: Throwable) {
                 onSearchGifsError(throwable)
             }
@@ -69,12 +65,30 @@ class GifFragmentViewModel @Inject constructor(
     }
 
     private fun onSearchGifsError(throwable: Throwable) {
+        hideProgressBar()
         Log.d("error", throwable.toString())
     }
 
-    fun updateSearchKeywordAndReset(keyword: String) {
-        _gifObjectList.value = null
-        _searchNextQueryPos.value = null
+    private fun onResponseSuccess(response: TenorResponse) {
+        response.next?.let {
+            _nextQueryPos.value = it
+        }
+        response.results?.let {
+            _gifObjectList.value = processPagination(it)
+        }
+    }
+
+    private fun processPagination(responseList: List<GifObject>): List<GifObject> {
+        return _gifObjectList.value?.let {
+            mutableListOf<GifObject>().apply {
+                addAll(it)
+                addAll(responseList)
+            }
+        } ?: responseList
+    }
+
+    fun updateSearchKeyword(keyword: String) {
+        resetCurrentData()
         currentKeyword = keyword
     }
 
@@ -86,12 +100,22 @@ class GifFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun processPagination(responseList: List<GifObject>): List<GifObject> {
-        return _gifObjectList.value?.let {
-            mutableListOf<GifObject>().apply {
-                addAll(it)
-                addAll(responseList)
-            }
-        } ?: responseList
+    fun showTrendingGifs() {
+        resetCurrentData()
+        getTrendingGifs()
+    }
+
+    private fun resetCurrentData() {
+        currentKeyword = ""
+        _gifObjectList.value = null
+        _nextQueryPos.value = null
+    }
+
+    private fun showProgressBar() {
+        _isLoading.value = true
+    }
+
+    private fun hideProgressBar() {
+        _isLoading.value = false
     }
 }
